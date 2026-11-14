@@ -110,7 +110,7 @@ export function XMLogo({ className = 'w-7 h-7' }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="36" height="36" rx="8" fill="rgba(212, 175, 55, 0.08)" stroke="rgba(212, 175, 55, 0.25)" />
+      <rect width="36" height="36" rx="8" className="fill-blue-500/[0.08] stroke-blue-500/25 dark:fill-[#d4af37]/[0.08] dark:stroke-[#d4af37]/25" />
       {/* Stylized XM Monogram */}
       <path
         d="M8 10h4.2l3 5.5 3-5.5h4.2L17.5 18 23 26h-4.3l-3.5-5.8L11.7 26H7.5l5.8-8.2L8 10z"
@@ -118,7 +118,7 @@ export function XMLogo({ className = 'w-7 h-7' }) {
       />
       <path
         d="M23.5 10h3.2v16h-3.2V10z"
-        fill="#d4af37"
+        className="fill-blue-600 dark:fill-[#d4af37]"
       />
     </svg>
   )
@@ -132,7 +132,7 @@ export function ExnessLogo({ className = 'w-7 h-7' }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="36" height="36" rx="8" fill="rgba(212, 175, 55, 0.08)" stroke="rgba(212, 175, 55, 0.25)" />
+      <rect width="36" height="36" rx="8" className="fill-blue-500/[0.08] stroke-blue-500/25 dark:fill-[#d4af37]/[0.08] dark:stroke-[#d4af37]/25" />
       {/* Stylized Exness Ribbon Emblem */}
       <path
         d="M12.5 12a4.5 4.5 0 0 0-4.5 4.5c0 2.5 2 4.5 4.5 4.5h4.5v-3h-4.5a1.5 1.5 0 0 1-1.5-1.5c0-.8.7-1.5 1.5-1.5h7.5V12h-7.5z"
@@ -140,7 +140,7 @@ export function ExnessLogo({ className = 'w-7 h-7' }) {
       />
       <path
         d="M23.5 24a4.5 4.5 0 0 0 4.5-4.5c0-2.5-2-4.5-4.5-4.5h-4.5v3h4.5a1.5 1.5 0 0 1 1.5 1.5c0 .8-.7 1.5-1.5 1.5h-7.5V24h7.5z"
-        fill="#d4af37"
+        className="fill-blue-600 dark:fill-[#d4af37]"
       />
     </svg>
   )
