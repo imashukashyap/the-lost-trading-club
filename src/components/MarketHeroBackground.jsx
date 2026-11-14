@@ -1,12 +1,23 @@
 import React, { useEffect, useRef } from 'react'
+import { useTheme } from '../context/ThemeContext'
 
 export default function MarketHeroBackground() {
   const canvasRef = useRef(null)
+  const { isDark } = useTheme()
+  const isDarkRef = useRef(isDark)
+  isDarkRef.current = isDark
+  const handleResizeRef = useRef(null)
+
+  useEffect(() => {
+    if (handleResizeRef.current) {
+      handleResizeRef.current()
+    }
+  }, [isDark])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d', { alpha: false })
+    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true })
     if (!ctx) return
 
     let animationFrameId
@@ -19,17 +30,20 @@ export default function MarketHeroBackground() {
 
     // Offscreen canvas to cache static background glow and perspective grid
     const bgCanvas = document.createElement('canvas')
-    const bgCtx = bgCanvas.getContext('2d')
+    const bgCtx = bgCanvas.getContext('2d', { alpha: false })
 
-    // Pre-allocated gradient caches (re-calculated only on resize, NEVER per frame)
+    // Pre-allocated gradient & color caches (re-calculated only on resize/theme change, NEVER per frame)
     let volGradUp = null
     let volGradDown = null
     let lineGrad = null
     let fillGrad = null
+    let colors = {}
 
     const handleResize = () => {
+      const dark = isDarkRef.current
       const rect = canvas.getBoundingClientRect()
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+      // Capping DPR at 1.25 gives crisp retina fidelity while preventing massive GPU fill-rate drops
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25)
       width = rect.width
       height = rect.height
 
@@ -37,6 +51,7 @@ export default function MarketHeroBackground() {
       canvas.height = Math.floor(rect.height * dpr)
       ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.scale(dpr, dpr)
+      ctx.font = '10px "JetBrains Mono", monospace'
 
       // Resize and pre-render the static background offscreen canvas
       bgCanvas.width = canvas.width
@@ -44,8 +59,8 @@ export default function MarketHeroBackground() {
       bgCtx.setTransform(1, 0, 0, 1, 0, 0)
       bgCtx.scale(dpr, dpr)
 
-      // 1. Draw static background base (#060709)
-      bgCtx.fillStyle = '#060709'
+      // 1. Draw static background base
+      bgCtx.fillStyle = dark ? '#060709' : '#f8fafc'
       bgCtx.fillRect(0, 0, width, height)
 
       // 2. Draw static ambient radial glow on the right
@@ -57,10 +72,17 @@ export default function MarketHeroBackground() {
         height * 0.4,
         width * 0.6
       )
-      radialGlow.addColorStop(0, 'rgba(212, 175, 55, 0.11)')
-      radialGlow.addColorStop(0.45, 'rgba(180, 140, 45, 0.045)')
-      radialGlow.addColorStop(0.8, 'rgba(120, 90, 25, 0.012)')
-      radialGlow.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      if (dark) {
+        radialGlow.addColorStop(0, 'rgba(212, 175, 55, 0.11)')
+        radialGlow.addColorStop(0.45, 'rgba(180, 140, 45, 0.045)')
+        radialGlow.addColorStop(0.8, 'rgba(120, 90, 25, 0.012)')
+        radialGlow.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      } else {
+        radialGlow.addColorStop(0, 'rgba(37, 99, 235, 0.09)')
+        radialGlow.addColorStop(0.45, 'rgba(59, 130, 246, 0.04)')
+        radialGlow.addColorStop(0.8, 'rgba(96, 165, 250, 0.012)')
+        radialGlow.addColorStop(1, 'rgba(248, 250, 252, 0)')
+      }
       bgCtx.fillStyle = radialGlow
       bgCtx.fillRect(0, 0, width, height)
 
@@ -72,7 +94,9 @@ export default function MarketHeroBackground() {
       for (let c = 0; c <= gridCols; c++) {
         const x = (width / gridCols) * c
         const colAlpha = Math.max(0.01, (c / gridCols) * 0.04)
-        bgCtx.strokeStyle = `rgba(180, 145, 75, ${colAlpha})`
+        bgCtx.strokeStyle = dark
+          ? `rgba(180, 145, 75, ${colAlpha})`
+          : `rgba(37, 99, 235, ${colAlpha * 0.85})`
         bgCtx.beginPath()
         bgCtx.moveTo(x, 0)
         bgCtx.lineTo(x, height)
@@ -81,7 +105,7 @@ export default function MarketHeroBackground() {
 
       for (let r = 0; r <= gridRows; r++) {
         const y = (height / gridRows) * r
-        bgCtx.strokeStyle = 'rgba(180, 145, 75, 0.02)'
+        bgCtx.strokeStyle = dark ? 'rgba(180, 145, 75, 0.02)' : 'rgba(37, 99, 235, 0.025)'
         bgCtx.beginPath()
         bgCtx.moveTo(0, y)
         bgCtx.lineTo(width, y)
@@ -90,39 +114,82 @@ export default function MarketHeroBackground() {
 
       // Pre-compute gradients for dynamic elements (0 allocation per frame!)
       volGradUp = ctx.createLinearGradient(0, height * 0.72, 0, height)
-      volGradUp.addColorStop(0, 'rgba(212, 175, 55, 0.38)')
-      volGradUp.addColorStop(0.7, 'rgba(140, 110, 45, 0.15)')
-      volGradUp.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      if (dark) {
+        volGradUp.addColorStop(0, 'rgba(212, 175, 55, 0.38)')
+        volGradUp.addColorStop(0.7, 'rgba(140, 110, 45, 0.15)')
+        volGradUp.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      } else {
+        volGradUp.addColorStop(0, 'rgba(37, 99, 235, 0.35)')
+        volGradUp.addColorStop(0.7, 'rgba(37, 99, 235, 0.12)')
+        volGradUp.addColorStop(1, 'rgba(248, 250, 252, 0)')
+      }
 
       volGradDown = ctx.createLinearGradient(0, height * 0.72, 0, height)
-      volGradDown.addColorStop(0, 'rgba(160, 125, 60, 0.28)')
-      volGradDown.addColorStop(0.7, 'rgba(100, 80, 35, 0.1)')
-      volGradDown.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      if (dark) {
+        volGradDown.addColorStop(0, 'rgba(160, 125, 60, 0.28)')
+        volGradDown.addColorStop(0.7, 'rgba(100, 80, 35, 0.1)')
+        volGradDown.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      } else {
+        volGradDown.addColorStop(0, 'rgba(30, 64, 175, 0.22)')
+        volGradDown.addColorStop(0.7, 'rgba(30, 64, 175, 0.08)')
+        volGradDown.addColorStop(1, 'rgba(248, 250, 252, 0)')
+      }
 
       lineGrad = ctx.createLinearGradient(0, 0, width, 0)
-      lineGrad.addColorStop(0, 'rgba(180, 140, 50, 0.04)')
-      lineGrad.addColorStop(0.38, 'rgba(212, 175, 55, 0.35)')
-      lineGrad.addColorStop(0.72, 'rgba(243, 229, 171, 0.85)')
-      lineGrad.addColorStop(1, 'rgba(255, 238, 179, 1.0)')
+      if (dark) {
+        lineGrad.addColorStop(0, 'rgba(180, 140, 50, 0.04)')
+        lineGrad.addColorStop(0.38, 'rgba(212, 175, 55, 0.35)')
+        lineGrad.addColorStop(0.72, 'rgba(243, 229, 171, 0.85)')
+        lineGrad.addColorStop(1, 'rgba(255, 238, 179, 1.0)')
+      } else {
+        lineGrad.addColorStop(0, 'rgba(37, 99, 235, 0.06)')
+        lineGrad.addColorStop(0.38, 'rgba(37, 99, 235, 0.45)')
+        lineGrad.addColorStop(0.72, 'rgba(29, 78, 216, 0.85)')
+        lineGrad.addColorStop(1, 'rgba(30, 58, 138, 1.0)')
+      }
 
       fillGrad = ctx.createLinearGradient(0, height * 0.18, 0, height)
-      fillGrad.addColorStop(0, 'rgba(212, 175, 55, 0.07)')
-      fillGrad.addColorStop(0.65, 'rgba(140, 105, 35, 0.012)')
-      fillGrad.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      if (dark) {
+        fillGrad.addColorStop(0, 'rgba(212, 175, 55, 0.07)')
+        fillGrad.addColorStop(0.65, 'rgba(140, 105, 35, 0.012)')
+        fillGrad.addColorStop(1, 'rgba(6, 7, 9, 0)')
+      } else {
+        fillGrad.addColorStop(0, 'rgba(37, 99, 235, 0.07)')
+        fillGrad.addColorStop(0.65, 'rgba(59, 130, 246, 0.012)')
+        fillGrad.addColorStop(1, 'rgba(248, 250, 252, 0)')
+      }
+
+      // Pre-compute constant color strings (0 allocation per frame!)
+      colors = {
+        wickUp: dark ? 'rgba(243, 229, 171, 0.75)' : 'rgba(37, 99, 235, 0.8)',
+        wickDown: dark ? 'rgba(180, 145, 80, 0.45)' : 'rgba(30, 64, 175, 0.45)',
+        bodyUpFill: dark ? 'rgba(229, 192, 123, 0.82)' : 'rgba(59, 130, 246, 0.85)',
+        bodyUpStroke: dark ? 'rgba(255, 238, 179, 0.9)' : 'rgba(29, 78, 216, 0.95)',
+        bodyDownFill: dark ? 'rgba(28, 23, 17, 0.85)' : 'rgba(219, 234, 254, 0.85)',
+        bodyDownStroke: dark ? 'rgba(165, 130, 68, 0.65)' : 'rgba(37, 99, 235, 0.65)',
+        auraUpFill: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(37, 99, 235, 0.18)',
+        auraDownFill: dark ? 'rgba(40, 32, 22, 0.2)' : 'rgba(147, 197, 253, 0.22)',
+        particleColor: dark ? 'rgba(220, 185, 100, 0.35)' : 'rgba(37, 99, 235, 0.32)',
+        nodeOuterColor: dark ? 'rgba(212, 175, 55, 0.8)' : 'rgba(37, 99, 235, 0.85)',
+        nodeInnerColor: dark ? 'rgba(255, 248, 220, 0.9)' : 'rgba(239, 246, 255, 0.95)',
+        pulseAura: dark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(37, 99, 235, 0.15)',
+        coordText: dark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(37, 99, 235, 0.45)',
+      }
     }
 
+    handleResizeRef.current = handleResize
     handleResize()
     window.addEventListener('resize', handleResize, { passive: true })
 
     // 1. DATA PARTICLES
-    const PARTICLE_COUNT = 45
+    const PARTICLE_COUNT = 40
     const particles = []
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particles.push({
         x: Math.random() * (width || 1200),
         y: Math.random() * (height || 800),
-        size: Math.random() * 1.6 + 0.6,
-        speedY: Math.random() * 0.35 + 0.1,
+        size: Math.random() * 1.5 + 0.6,
+        speedY: Math.random() * 0.32 + 0.1,
         speedX: (Math.random() - 0.48) * 0.2,
       })
     }
@@ -171,32 +238,27 @@ export default function MarketHeroBackground() {
         bodyDelta = Math.random() * 14.0 + 8.0
       }
 
-      const close = isUp ? open + bodyDelta : Math.max(20, open - bodyDelta)
+      const change = (isUp ? 1 : -1) * bodyDelta + (Math.random() - 0.5) * 1.5 + bias * 0.4
+      const close = open + change
       state.currentPrice = close
 
-      const topOfBody = Math.max(open, close)
-      const bottomOfBody = Math.min(open, close)
+      const upperWick = Math.random() * (bodyDelta * 0.75 + 3.5)
+      const lowerWick = Math.random() * (bodyDelta * 0.75 + 3.5)
+      const high = Math.max(open, close) + upperWick
+      const low = Math.min(open, close) - lowerWick
 
-      const upperWick = Math.random() < 0.15 ? Math.random() * 15 + 8 : Math.random() * 6 + 1.2
-      const lowerWick = Math.random() < 0.15 ? Math.random() * 15 + 8 : Math.random() * 6 + 1.2
+      const volume = Math.max(10, Math.min(65, (bodyDelta * 2.8) + (upperWick + lowerWick) * 1.5 + Math.random() * 15))
 
-      const high = topOfBody + upperWick
-      const low = Math.max(10, bottomOfBody - lowerWick)
-      const volume = (bodyDelta * 3.5 + upperWick + lowerWick) * (0.8 + Math.random() * 0.6)
-
-      return { open, close, high, low, isUp, volume }
+      return { open, high, low, close, isUp, volume }
     }
 
-    const initCandleSeries = () => {
-      candles = []
-      let price = currentWaveState.currentPrice
-      for (let i = 0; i < TOTAL_CANDLES; i++) {
-        const c = generateNextCandle(price, currentWaveState)
-        candles.push(c)
-        price = c.close
-      }
+    // Seed realistic multi-cycle market wave
+    let p = 145
+    for (let i = 0; i < TOTAL_CANDLES; i++) {
+      const c = generateNextCandle(p, currentWaveState)
+      candles.push(c)
+      p = c.close
     }
-    initCandleSeries()
 
     const coordinateNodes = [
       { rx: 0.46, ry: 0.22, text: '26.417' },
@@ -215,30 +277,22 @@ export default function MarketHeroBackground() {
       trendPoints[i] = { x: 0, y: 0 }
     }
 
-    // Constant colors to avoid string interpolation GC spikes
-    const WICK_UP_COLOR = 'rgba(243, 229, 171, 0.75)'
-    const WICK_DOWN_COLOR = 'rgba(180, 145, 80, 0.45)'
-    const BODY_UP_FILL = 'rgba(229, 192, 123, 0.82)'
-    const BODY_UP_STROKE = 'rgba(255, 238, 179, 0.9)'
-    const BODY_DOWN_FILL = 'rgba(28, 23, 17, 0.85)'
-    const BODY_DOWN_STROKE = 'rgba(165, 130, 68, 0.65)'
-    const AURA_UP_FILL = 'rgba(212, 175, 55, 0.15)'
-    const AURA_DOWN_FILL = 'rgba(40, 32, 22, 0.2)'
-    const PARTICLE_COLOR = 'rgba(220, 185, 100, 0.35)'
-    const NODE_OUTER_COLOR = 'rgba(212, 175, 55, 0.8)'
-    const NODE_INNER_COLOR = 'rgba(255, 248, 220, 0.9)'
-
-    // HIGH-PERFORMANCE 60FPS RENDER LOOP
+    // HIGH-PERFORMANCE 60FPS CAPPED RENDER LOOP
     const render = (now) => {
+      // 1. True pause: when offscreen, DO NOT schedule another frame!
       if (!isVisible) {
-        animationFrameId = requestAnimationFrame(render)
         return
       }
 
-      const elapsed = Math.min(now - lastTime, 100)
+      // 2. Frame limiter: smooth 60 FPS cap on high-refresh (90Hz/120Hz/144Hz) monitors
+      const delta = now - lastTime
+      if (delta < 15) {
+        animationFrameId = requestAnimationFrame(render)
+        return
+      }
       lastTime = now
 
-      tickTime += elapsed
+      tickTime += delta
       pulseAngle += 0.03
 
       if (!prefersReducedMotion && tickTime > 90) {
@@ -266,7 +320,8 @@ export default function MarketHeroBackground() {
       const volWidth = width / (volBarCount + 2)
       const barDrawWidth = Math.max(1.8, volWidth * 0.65)
 
-      ctx.fillStyle = volGradUp || 'rgba(212, 175, 55, 0.3)'
+      // Group volume bars by up/down to minimize context state changes
+      ctx.fillStyle = volGradUp
       for (let i = 0; i < volBarCount; i++) {
         const c = candles[i]
         if (c.isUp) {
@@ -276,7 +331,7 @@ export default function MarketHeroBackground() {
         }
       }
 
-      ctx.fillStyle = volGradDown || 'rgba(160, 125, 60, 0.25)'
+      ctx.fillStyle = volGradDown
       for (let i = 0; i < volBarCount; i++) {
         const c = candles[i]
         if (!c.isUp) {
@@ -308,50 +363,80 @@ export default function MarketHeroBackground() {
       const candleSpacing = width / (TOTAL_CANDLES + 2)
       const candleBodyW = Math.max(3.2, Math.min(9.5, candleSpacing * 0.62))
 
-      // --- 4. RENDER HIGH-FIDELITY CANDLESTICKS ---
+      // --- 4. BATCH RENDER HIGH-FIDELITY CANDLESTICKS ---
+      // Batch UP wicks in one draw call
+      ctx.lineWidth = 1.1
+      ctx.strokeStyle = colors.wickUp
+      ctx.beginPath()
+      for (let idx = 0; idx < TOTAL_CANDLES; idx++) {
+        const c = candles[idx]
+        if (c.isUp) {
+          const x = idx * candleSpacing + candleSpacing * 1.4
+          const openY = chartBottom - (c.open - minP) * scaleFactor
+          const closeY = chartBottom - (c.close - minP) * scaleFactor
+          const highY = chartBottom - (c.high - minP) * scaleFactor
+          const lowY = chartBottom - (c.low - minP) * scaleFactor
+          const topY = Math.min(openY, closeY)
+          const bottomY = Math.max(openY, closeY)
+          ctx.moveTo(x, highY)
+          ctx.lineTo(x, topY)
+          ctx.moveTo(x, bottomY)
+          ctx.lineTo(x, lowY)
+        }
+      }
+      ctx.stroke()
+
+      // Batch DOWN wicks in one draw call
+      ctx.strokeStyle = colors.wickDown
+      ctx.beginPath()
+      for (let idx = 0; idx < TOTAL_CANDLES; idx++) {
+        const c = candles[idx]
+        if (!c.isUp) {
+          const x = idx * candleSpacing + candleSpacing * 1.4
+          const openY = chartBottom - (c.open - minP) * scaleFactor
+          const closeY = chartBottom - (c.close - minP) * scaleFactor
+          const highY = chartBottom - (c.high - minP) * scaleFactor
+          const lowY = chartBottom - (c.low - minP) * scaleFactor
+          const topY = Math.min(openY, closeY)
+          const bottomY = Math.max(openY, closeY)
+          ctx.moveTo(x, highY)
+          ctx.lineTo(x, topY)
+          ctx.moveTo(x, bottomY)
+          ctx.lineTo(x, lowY)
+        }
+      }
+      ctx.stroke()
+
+      // Render Candle Auras & Bodies
       for (let idx = 0; idx < TOTAL_CANDLES; idx++) {
         const c = candles[idx]
         const x = idx * candleSpacing + candleSpacing * 1.4
 
         const openY = chartBottom - (c.open - minP) * scaleFactor
         const closeY = chartBottom - (c.close - minP) * scaleFactor
-        const highY = chartBottom - (c.high - minP) * scaleFactor
-        const lowY = chartBottom - (c.low - minP) * scaleFactor
-
         const topY = Math.min(openY, closeY)
-        const bottomY = Math.max(openY, closeY)
         const bodyHeight = Math.max(Math.abs(openY - closeY), 2.5)
 
         trendPoints[idx].x = x
         trendPoints[idx].y = chartBottom - ((c.close * 0.75 + (c.high + c.low) * 0.125) - minP) * scaleFactor
 
-        // Draw wicks
-        ctx.lineWidth = 1.1
-        ctx.strokeStyle = c.isUp ? WICK_UP_COLOR : WICK_DOWN_COLOR
-        ctx.beginPath()
-        ctx.moveTo(x, highY)
-        ctx.lineTo(x, topY)
-        ctx.moveTo(x, bottomY)
-        ctx.lineTo(x, lowY)
-        ctx.stroke()
-
-        // Soft holographic atmospheric aura
+        // Soft atmospheric aura
         if (idx > 22) {
-          ctx.fillStyle = c.isUp ? AURA_UP_FILL : AURA_DOWN_FILL
+          ctx.fillStyle = c.isUp ? colors.auraUpFill : colors.auraDownFill
           ctx.fillRect(x - candleBodyW / 2 - 2, topY - 2, candleBodyW + 4, bodyHeight + 4)
         }
 
         // Rectangular Body
         if (c.isUp) {
-          ctx.fillStyle = BODY_UP_FILL
+          ctx.fillStyle = colors.bodyUpFill
           ctx.fillRect(x - candleBodyW / 2, topY, candleBodyW, bodyHeight)
-          ctx.strokeStyle = BODY_UP_STROKE
+          ctx.strokeStyle = colors.bodyUpStroke
           ctx.lineWidth = 1
           ctx.strokeRect(x - candleBodyW / 2, topY, candleBodyW, bodyHeight)
         } else {
-          ctx.fillStyle = BODY_DOWN_FILL
+          ctx.fillStyle = colors.bodyDownFill
           ctx.fillRect(x - candleBodyW / 2, topY, candleBodyW, bodyHeight)
-          ctx.strokeStyle = BODY_DOWN_STROKE
+          ctx.strokeStyle = colors.bodyDownStroke
           ctx.lineWidth = 1
           ctx.strokeRect(x - candleBodyW / 2, topY, candleBodyW, bodyHeight)
         }
@@ -370,67 +455,58 @@ export default function MarketHeroBackground() {
         }
         ctx.lineTo(trendPoints[TOTAL_CANDLES - 1].x, trendPoints[TOTAL_CANDLES - 1].y)
 
-        ctx.save()
-        ctx.strokeStyle = lineGrad || '#d4af37'
+        ctx.strokeStyle = lineGrad
         ctx.lineWidth = 2.2
         ctx.stroke()
-        ctx.restore()
 
+        // Spline Area Gradient Fill beneath curve
         ctx.lineTo(trendPoints[TOTAL_CANDLES - 1].x, height)
         ctx.lineTo(trendPoints[0].x, height)
         ctx.closePath()
-        ctx.fillStyle = fillGrad || 'rgba(212, 175, 55, 0.05)'
+        ctx.fillStyle = fillGrad
         ctx.fill()
 
-        const pivotStep = 7
-        for (let i = 5; i < TOTAL_CANDLES; i += pivotStep) {
-          const pt = trendPoints[i]
-          ctx.beginPath()
-          ctx.arc(pt.x, pt.y, 3.6, 0, Math.PI * 2)
-          ctx.fillStyle = NODE_OUTER_COLOR
-          ctx.fill()
-
-          ctx.beginPath()
-          ctx.arc(pt.x, pt.y, 1.8, 0, Math.PI * 2)
-          ctx.fillStyle = NODE_INNER_COLOR
-          ctx.fill()
-        }
-
+        // Glowing live price node at final candle
         const lastPt = trendPoints[TOTAL_CANDLES - 1]
-        if (lastPt) {
-          const pulse = Math.sin(pulseAngle) * 2.5 + 5
-          ctx.beginPath()
-          ctx.arc(lastPt.x, lastPt.y, 18, 0, Math.PI * 2)
-          ctx.fillStyle = 'rgba(212, 175, 55, 0.18)'
-          ctx.fill()
+        const pulse = Math.sin(pulseAngle * 2.5) * 2.5
 
-          ctx.beginPath()
-          ctx.arc(lastPt.x, lastPt.y, pulse, 0, Math.PI * 2)
-          ctx.fillStyle = '#fff9e6'
-          ctx.fill()
-        }
+        ctx.beginPath()
+        ctx.arc(lastPt.x, lastPt.y, 9 + pulse, 0, Math.PI * 2)
+        ctx.fillStyle = colors.pulseAura
+        ctx.fill()
+
+        ctx.beginPath()
+        ctx.arc(lastPt.x, lastPt.y, 4, 0, Math.PI * 2)
+        ctx.fillStyle = colors.nodeOuterColor
+        ctx.fill()
+
+        ctx.beginPath()
+        ctx.arc(lastPt.x, lastPt.y, 1.8, 0, Math.PI * 2)
+        ctx.fillStyle = colors.nodeInnerColor
+        ctx.fill()
       }
 
-      // --- 6. FLOATING PARTICLES (BATCHED PATH) ---
-      ctx.fillStyle = PARTICLE_COLOR
-      ctx.beginPath()
+      // --- 6. FLOATING DUST PARTICLES ---
+      ctx.fillStyle = colors.particleColor
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const p = particles[i]
-        if (!prefersReducedMotion) {
-          p.y -= p.speedY
-          p.x += p.speedX
-          if (p.y < 0) p.y = height
-          if (p.x < 0) p.x = width
-          if (p.x > width) p.x = 0
+        p.y -= p.speedY
+        p.x += p.speedX
+
+        if (p.y < 0) {
+          p.y = height + 10
+          p.x = Math.random() * width
         }
-        ctx.moveTo(p.x + p.size, p.y)
+        if (p.x < 0) p.x = width
+        if (p.x > width) p.x = 0
+
+        ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fill()
       }
-      ctx.fill()
 
       // --- 7. DIGITAL COORDINATE ANNOTATIONS ---
-      ctx.font = '10px "JetBrains Mono", monospace'
-      ctx.fillStyle = 'rgba(212, 175, 55, 0.35)'
+      ctx.fillStyle = colors.coordText
       for (let i = 0; i < coordinateNodes.length; i++) {
         const node = coordinateNodes[i]
         ctx.fillText(node.text, node.rx * width, node.ry * height)
@@ -441,9 +517,19 @@ export default function MarketHeroBackground() {
 
     animationFrameId = requestAnimationFrame(render)
 
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting
-    })
+    // WAKE/PAUSE OBSERVER: 100% idle when off-screen, zero battery/CPU overhead
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible
+        isVisible = entry.isIntersecting
+        if (isVisible && !wasVisible) {
+          lastTime = performance.now()
+          cancelAnimationFrame(animationFrameId)
+          animationFrameId = requestAnimationFrame(render)
+        }
+      },
+      { threshold: 0.02 }
+    )
     observer.observe(canvas)
 
     return () => {
@@ -463,20 +549,22 @@ export default function MarketHeroBackground() {
       />
 
       {/* 2. Seamless Gradient Overlays */}
-      {/* Mobile Subtle Vignette: Soft radial shade preserving gold animation as a cinematic backdrop without competing with text */}
+      {/* Mobile Subtle Vignette */}
       <div
-        className="absolute inset-0 sm:hidden pointer-events-none"
+        className="absolute inset-0 sm:hidden pointer-events-none transition-all duration-300"
         style={{
-          background: 'radial-gradient(ellipse 95% 65% at 50% 50%, rgba(6, 7, 9, 0.90) 0%, rgba(6, 7, 9, 0.60) 60%, rgba(6, 7, 9, 0.25) 100%)',
+          background: isDark
+            ? 'radial-gradient(ellipse 95% 65% at 50% 50%, rgba(6, 7, 9, 0.90) 0%, rgba(6, 7, 9, 0.60) 60%, rgba(6, 7, 9, 0.25) 100%)'
+            : 'radial-gradient(ellipse 95% 65% at 50% 50%, rgba(248, 250, 252, 0.92) 0%, rgba(248, 250, 252, 0.60) 60%, rgba(248, 250, 252, 0.25) 100%)',
         }}
       />
 
-      {/* Desktop Directional Fade (Preserved 100% for desktop) */}
-      <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-[#060709] via-[#060709]/85 sm:via-[#060709]/75 to-transparent to-[75%] pointer-events-none" />
+      {/* Desktop Directional Fade */}
+      <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-[#f8fafc] via-[#f8fafc]/85 to-transparent to-[75%] dark:from-[#060709] dark:via-[#060709]/85 dark:sm:via-[#060709]/75 dark:to-transparent pointer-events-none transition-colors duration-300" />
 
       {/* Top and Bottom Fades */}
-      <div className="absolute inset-x-0 bottom-0 h-20 sm:h-16 bg-gradient-to-t from-[#060709] to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#060709] via-[#060709]/60 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-20 sm:h-16 bg-gradient-to-t from-[#f8fafc] dark:from-[#060709] to-transparent pointer-events-none transition-colors duration-300" />
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#f8fafc] via-[#f8fafc]/60 dark:from-[#060709] dark:via-[#060709]/60 to-transparent pointer-events-none transition-colors duration-300" />
     </div>
   )
 }

@@ -2,9 +2,11 @@ import React from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { TelegramIcon, InstagramIcon } from './Icons'
+import { useTheme } from '../context/ThemeContext'
 
 export default function Connect() {
   const shouldReduceMotion = useReducedMotion()
+  const { isDark } = useTheme()
 
   const links = [
     {
@@ -26,7 +28,7 @@ export default function Connect() {
   return (
     <section
       id="connect"
-      className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]"
+      className="relative py-32 px-6 sm:px-10 border-t border-slate-200/80 dark:border-white/[0.04] transition-colors duration-300"
     >
       <div className="max-w-3xl mx-auto text-center">
         {/* Subtle Section Label */}
@@ -35,10 +37,10 @@ export default function Connect() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.3em] uppercase text-[#d4af37] mb-6"
+          className="inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.3em] uppercase text-[#2563eb] dark:text-[#d4af37] mb-6 transition-colors duration-300"
         >
           <span>03</span>
-          <span className="w-6 h-[1px] bg-[#d4af37]/40" />
+          <span className="w-6 h-[1px] bg-[#2563eb]/40 dark:bg-[#d4af37]/40" />
           <span>CONNECT</span>
         </motion.div>
 
@@ -48,9 +50,9 @@ export default function Connect() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-snug mb-4"
+          className="text-3xl sm:text-5xl font-serif font-light text-slate-900 dark:text-white tracking-tight leading-snug mb-4 transition-colors duration-300"
         >
-          The <span className="italic text-[#d4af37]">Channels</span>
+          The <span className="italic text-[#2563eb] dark:text-[#d4af37] transition-colors duration-300">Channels</span>
         </motion.h2>
 
         {/* Subtitle */}
@@ -59,7 +61,7 @@ export default function Connect() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.65, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
-          className="text-sm text-neutral-400 font-light max-w-md mx-auto mb-14"
+          className="text-sm text-slate-500 dark:text-neutral-400 font-light max-w-md mx-auto mb-14 transition-colors duration-300"
         >
           Follow the journey and observe our execution in real time.
         </motion.p>
@@ -89,30 +91,38 @@ export default function Connect() {
                 whileHover={
                   shouldReduceMotion
                     ? {}
-                    : {
+                    : isDark
+                    ? {
                         y: -6,
                         borderColor: 'rgba(212, 175, 55, 0.45)',
                         boxShadow:
                           '0 20px 40px -15px rgba(0, 0, 0, 0.85), 0 0 25px -5px rgba(212, 175, 55, 0.16)',
                         transition: { duration: 0.35, ease: 'easeOut' },
                       }
+                    : {
+                        y: -6,
+                        borderColor: 'rgba(37, 99, 235, 0.45)',
+                        boxShadow:
+                          '0 20px 40px -15px rgba(37, 99, 235, 0.12), 0 0 25px -5px rgba(37, 99, 235, 0.08)',
+                        transition: { duration: 0.35, ease: 'easeOut' },
+                      }
                 }
-                className="group relative p-7 rounded-2xl border border-white/[0.07] bg-[#0c0e14]/60 backdrop-blur-md transition-colors duration-300 flex flex-col justify-between"
+                className="group relative p-7 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0e14]/60 backdrop-blur-md shadow-sm dark:shadow-none transition-colors duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-5">
-                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[#d4af37] group-hover:scale-105 group-hover:border-[#d4af37]/30 transition-all duration-300">
+                    <div className="p-3 rounded-xl bg-slate-100 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06] text-blue-600 dark:text-[#d4af37] group-hover:scale-105 group-hover:border-blue-500/40 dark:group-hover:border-[#d4af37]/30 transition-all duration-300">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-neutral-500 group-hover:text-[#d4af37] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <ArrowUpRight className="w-4 h-4 text-slate-400 dark:text-neutral-500 group-hover:text-blue-600 dark:group-hover:text-[#d4af37] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
-                  <h3 className="text-lg font-display font-medium text-white group-hover:text-[#f3e5ab] transition-colors">
+                  <h3 className="text-lg font-display font-medium text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-[#f3e5ab] transition-colors">
                     {item.name}
                   </h3>
-                  <p className="text-xs font-mono text-[#d4af37] tracking-wider mb-2">
+                  <p className="text-xs font-mono text-blue-600 dark:text-[#d4af37] tracking-wider mb-2">
                     {item.handle}
                   </p>
-                  <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                  <p className="text-xs text-slate-500 dark:text-neutral-400 font-light leading-relaxed">
                     {item.description}
                   </p>
                 </div>
