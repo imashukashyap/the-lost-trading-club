@@ -39,7 +39,7 @@ export default function Hero({ onNavigateToHowToJoin }) {
               href="https://t.me/TheLostTradingClub"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center gap-2.5 sm:gap-3 px-7 sm:px-8 py-3 sm:py-3.5 rounded-full border border-blue-500/35 dark:border-[#d4af37]/40 bg-white/90 dark:bg-[#0d1017]/90 text-blue-900 dark:text-[#f3e5ab] text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em] sm:tracking-[0.25em] hover:border-blue-600 dark:hover:border-[#d4af37] hover:bg-blue-50/80 dark:hover:bg-[#d4af37]/15 hover:shadow-[0_0_35px_rgba(37,99,235,0.2)] dark:hover:shadow-[0_0_35px_rgba(212,175,55,0.22)] transition-all duration-300 backdrop-blur-md shadow-sm dark:shadow-none w-full min-[400px]:w-auto"
+              className="group relative inline-flex items-center justify-center gap-2.5 sm:gap-3 px-7 sm:px-8 py-3 sm:py-3.5 rounded-full border border-blue-500/35 dark:border-[#d4af37]/40 bg-white/90 dark:bg-[#0d1017]/90 text-blue-900 dark:text-[#f3e5ab] text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em] sm:tracking-[0.25em] hover:border-blue-600 dark:hover:border-[#d4af37] hover:bg-blue-50/80 dark:hover:bg-[#d4af37]/15 hover:shadow-[0_0_35px_rgba(37,99,235,0.2)] dark:hover:shadow-[0_0_35px_rgba(212,175,55,0.22)] transition-all duration-300 backdrop-blur-md shadow-sm dark:shadow-none w-[88%] sm:w-auto"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>Join Telegram</span>
@@ -57,7 +57,7 @@ export default function Hero({ onNavigateToHowToJoin }) {
                   window.location.href = '/how-to-join'
                 }
               }}
-              className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-9 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 dark:from-[#d4af37] dark:via-[#e2c46c] dark:to-[#c9a02a] text-white dark:text-[#08090d] border border-blue-400/40 dark:border-[#f7e7b4]/60 text-xs sm:text-[13px] font-semibold uppercase tracking-[0.24em] sm:tracking-[0.28em] shadow-[0_4px_25px_rgba(37,99,235,0.32)] hover:shadow-[0_6px_35px_rgba(37,99,235,0.48)] dark:shadow-[0_0_28px_rgba(212,175,55,0.38)] dark:hover:shadow-[0_0_42px_rgba(212,175,55,0.62)] hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.99] hover:brightness-105 transition-all duration-300 ease-out w-full min-[400px]:w-auto cursor-pointer"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-9 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 dark:from-[#d4af37] dark:via-[#e2c46c] dark:to-[#c9a02a] text-white dark:text-[#08090d] border border-blue-400/40 dark:border-[#f7e7b4]/60 text-xs sm:text-[13px] font-semibold uppercase tracking-[0.24em] sm:tracking-[0.28em] shadow-[0_4px_25px_rgba(37,99,235,0.32)] hover:shadow-[0_6px_35px_rgba(37,99,235,0.48)] dark:shadow-[0_0_28px_rgba(212,175,55,0.38)] dark:hover:shadow-[0_0_42px_rgba(212,175,55,0.62)] hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.99] hover:brightness-105 transition-all duration-300 ease-out w-full sm:w-auto cursor-pointer"
             >
               <span>How To Join Us</span>
               <ArrowRight className="w-4 h-4 text-white dark:text-[#08090d] transform group-hover:translate-x-1.5 transition-transform duration-300 ease-out" />
