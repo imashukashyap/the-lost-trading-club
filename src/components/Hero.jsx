@@ -6,36 +6,39 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full h-screen h-[100svh] min-h-[100svh] flex flex-col justify-center pt-20 px-6 sm:px-10 lg:px-16 overflow-hidden"
+      className="relative w-full h-screen h-[100svh] min-h-[100svh] flex flex-col justify-center pt-16 pb-12 sm:pt-20 sm:pb-0 px-6 sm:px-10 lg:px-16 overflow-hidden"
     >
       {/* 1. Full-Screen Edge-to-Edge Animated Market Background */}
       <MarketHeroBackground />
 
       {/* 2. Hero Content (Positioned Above the Animation Layer) */}
-      <div className="relative z-20 max-w-7xl mx-auto w-full">
-        <div className="max-w-2xl flex flex-col items-start text-left">
+      <div className="relative z-20 max-w-7xl mx-auto w-full flex flex-col items-center sm:items-start">
+        <div className="max-w-2xl flex flex-col items-center text-center sm:items-start sm:text-left w-full">
           {/* Brand Monogram */}
-          <div className="mb-6 text-[#d4af37] text-lg font-serif tracking-widest select-none">
+          <div className="mb-3.5 sm:mb-6 text-[#d4af37] text-base sm:text-lg font-serif tracking-widest select-none">
             ◇
           </div>
 
           {/* Master Brand Title */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light tracking-tight text-[#f5f5f7] leading-[1.06] mb-6">
-            THE LOST <span className="italic font-normal text-[#d4af37]">TRADING</span> CLUB
+          <h1 className="text-[2.15rem] min-[375px]:text-4xl min-[410px]:text-[2.65rem] sm:text-6xl md:text-7xl lg:text-8xl font-serif font-light tracking-tight text-[#f5f5f7] leading-[1.12] sm:leading-[1.06] mb-4 sm:mb-6">
+            <span className="block sm:inline">THE LOST</span>{' '}
+            <span className="block sm:inline">
+              <span className="italic font-normal text-[#d4af37]">TRADING</span> CLUB
+            </span>
           </h1>
 
           {/* Tagline */}
-          <p className="text-xs sm:text-sm md:text-base font-mono tracking-[0.35em] uppercase text-neutral-400 mb-10">
+          <p className="text-[10.5px] min-[375px]:text-xs sm:text-sm md:text-base font-mono tracking-[0.2em] min-[375px]:tracking-[0.24em] sm:tracking-[0.35em] uppercase text-neutral-400 mb-7 sm:mb-10 max-w-sm sm:max-w-none">
             Discipline. Patience. Precision.
           </p>
 
           {/* Join Telegram Button */}
-          <div>
+          <div className="flex justify-center sm:justify-start w-full sm:w-auto">
             <a
               href="https://t.me/TheLostTradingClub"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full border border-[#d4af37]/40 bg-[#0d1017]/90 text-[#f3e5ab] text-xs font-medium uppercase tracking-[0.25em] hover:border-[#d4af37] hover:bg-[#d4af37]/15 hover:shadow-[0_0_35px_rgba(212,175,55,0.22)] transition-all duration-300 backdrop-blur-md"
+              className="group relative inline-flex items-center gap-2.5 sm:gap-3 px-7 sm:px-8 py-3 sm:py-3.5 rounded-full border border-[#d4af37]/40 bg-[#0d1017]/90 text-[#f3e5ab] text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em] sm:tracking-[0.25em] hover:border-[#d4af37] hover:bg-[#d4af37]/15 hover:shadow-[0_0_35px_rgba(212,175,55,0.22)] transition-all duration-300 backdrop-blur-md"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Join Telegram</span>

@@ -458,13 +458,24 @@ export default function MarketHeroBackground() {
       {/* 1. Underlying High-Performance Canvas */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full block"
+        className="w-full h-full block opacity-60 sm:opacity-100 transition-opacity duration-300"
         style={{ width: '100%', height: '100%', transform: 'translateZ(0)' }}
       />
 
       {/* 2. Seamless Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#060709] via-[#060709]/85 sm:via-[#060709]/75 to-transparent to-[75%] pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#060709] to-transparent pointer-events-none" />
+      {/* Mobile Subtle Vignette: Soft radial shade preserving gold animation as a cinematic backdrop without competing with text */}
+      <div
+        className="absolute inset-0 sm:hidden pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 95% 65% at 50% 50%, rgba(6, 7, 9, 0.90) 0%, rgba(6, 7, 9, 0.60) 60%, rgba(6, 7, 9, 0.25) 100%)',
+        }}
+      />
+
+      {/* Desktop Directional Fade (Preserved 100% for desktop) */}
+      <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-[#060709] via-[#060709]/85 sm:via-[#060709]/75 to-transparent to-[75%] pointer-events-none" />
+
+      {/* Top and Bottom Fades */}
+      <div className="absolute inset-x-0 bottom-0 h-20 sm:h-16 bg-gradient-to-t from-[#060709] to-transparent pointer-events-none" />
       <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#060709] via-[#060709]/60 to-transparent pointer-events-none" />
     </div>
   )
