@@ -8,7 +8,10 @@ Featuring a cinematic dark obsidian aesthetic, elegant editorial typography, dis
 
 ## ✨ Design & Performance Overview
 
-- **Aesthetic**: Deep void obsidian palette (`#060709`), champagne gold (`#d4af37`), metallic amber (`#e5c07b`), and dark bronze accents.
+- **Aesthetic**: Dual luxury themes with instant reactive switching:
+  - **Dark Mode (Default)**: Deep void obsidian palette (`#060709`), champagne gold (`#d4af37`), metallic amber (`#e5c07b`), and dark bronze accents.
+  - **Light Mode**: Crisp off-white & clean slate (`#f8fafc`), sophisticated royal blue (`#2563eb`), and deep navy charcoal typography (`#0f172a`).
+  - Seamless persistence via `localStorage` with dark mode default for first-time visitors.
 - **Typography**: Cormorant Garamond (luxury serif), Syne (modern display), Plus Jakarta Sans (body), and JetBrains Mono (tactical accents).
 - **Hero Background**: Full-screen, edge-to-edge market animation with realistic OHLC wave dynamics, wicks, volume bars, and glowing spline.
 - **Cinematic Scroll Animations**: Smooth staggered entrances for Referrals, Connect, and Support cards with reduced-motion support.
@@ -22,8 +25,8 @@ Featuring a cinematic dark obsidian aesthetic, elegant editorial typography, dis
 2. **Home (Hero)**:
    - Full-screen edge-to-edge animated financial market canvas background with realistic candlestick wave action.
    - Left-aligned brand monogram `◇`, master title **THE LOST TRADING CLUB**, tagline *"Discipline. Patience. Precision."*, and luxury **Join Telegram** button.
-3. **About**:
-   - Short, evocative introduction explaining the purpose and philosophy of The Lost Trading Club (capital preservation, emotional restraint, asymmetric risk).
+3. **About (Our Story - Better Together)**:
+   - Welcoming, community-focused story addressing the challenges and isolation of trading, and how The Lost Trading Club provides an environment for traders to grow, share ideas, and succeed together.
 4. **Referrals (Trading Platforms)**:
    - **XM Broker**:
      - Registration URL: `https://www.xmglobal.com/referral?token=IZ4FnguHtNqmve6ztKhvJQ`
