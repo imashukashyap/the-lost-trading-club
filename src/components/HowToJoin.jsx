@@ -15,12 +15,6 @@ import {
 /**
  * ============================================================================
  * THE LOST TRADING CLUB — "HOW TO JOIN US" ONBOARDING ROADMAP
- *
- * HOW TO ADD YOUR ACTUAL STEPS:
- * 1. Find the `stepsData` array below.
- * 2. Replace the placeholder titles, descriptions, notes, and links with
- *    your actual onboarding instructions when ready.
- * 3. Add or remove steps as needed.
  * ============================================================================
  */
 
@@ -29,10 +23,10 @@ const stepsData = [
     stepNumber: '01',
     badge: 'Step 01',
     title: 'Account Registration',
-    status: 'Ready for Steps',
+    status: 'ACCOUNT SETUP',
     description:
-      'Step 1 instructions placeholder: Add your actual registration requirements here. For example, instruct members to register using your official broker referral links or platform of choice.',
-    note: 'Placeholder Tip: Mention any referral codes or specific registration settings traders need to select.',
+      'Register with XM or Exness using our official referral links below. Complete the account registration with your correct details.',
+    note: 'Use our referral links to ensure your registration is properly associated with our community.',
     actions: [
       {
         label: 'Open XM Account',
@@ -49,21 +43,21 @@ const stepsData = [
   {
     stepNumber: '02',
     badge: 'Step 02',
-    title: 'Verification & Account Funding',
-    status: 'Ready for Steps',
+    title: 'Account Verification',
+    status: 'KYC VERIFICATION',
     description:
-      'Step 2 instructions placeholder: Add your account verification details here. For example, explain the identity verification process, KYC steps, or minimum account deposit required for club eligibility.',
-    note: 'Placeholder Tip: Provide guidance on average verification timeframes or accepted funding methods.',
+      "Complete your broker's identity verification (KYC) process. Ensure your account details and submitted documents are accurate.",
+    note: 'Keep your verification details ready and wait until your broker confirms your account is verified.',
     actions: [],
   },
   {
     stepNumber: '03',
     badge: 'Step 03',
     title: 'Submit Verification to Support',
-    status: 'Ready for Steps',
+    status: 'SUPPORT CONFIRMATION',
     description:
-      'Step 3 instructions placeholder: Explain how members should verify their account with the team. For example, instruct traders to send their broker account ID / screenshot to official support.',
-    note: 'Placeholder Tip: Specify what information to include in the message for fastest confirmation.',
+      'Once your account is verified, send your broker account ID and verification screenshot to our official Telegram support for confirmation.',
+    note: 'Never share your password, OTP, or sensitive login details with anyone.',
     actions: [
       {
         label: 'Message Support on Telegram',
@@ -75,16 +69,17 @@ const stepsData = [
   {
     stepNumber: '04',
     badge: 'Step 04',
-    title: 'Access The Private Community',
-    status: 'Ready for Steps',
+    title: 'Welcome to the Community',
+    status: 'COMMUNITY ACCESS',
     description:
-      'Step 4 instructions placeholder: Describe the final welcome and onboarding. For example, explain how approved members receive the private channel invitation link, discussion groups, and member resources.',
-    note: 'Welcome to the club. Grow alongside disciplined, like-minded traders.',
+      "Once your details are verified by our team, receive access to The Lost Trading Club's private Telegram community and start your journey with us.",
+    note: 'Stay connected, follow community guidelines, and trade with discipline.',
     actions: [
       {
-        label: 'Join Public Telegram Channel',
+        label: 'Join Our Exclusive Community',
         href: 'https://t.me/TheLostTradingClub',
         isExternal: true,
+        isPrimary: true,
       },
     ],
   },
@@ -169,7 +164,7 @@ export default function HowToJoin({ onNavigate }) {
                     </span>
                   </div>
 
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-[0.16em] bg-slate-100 dark:bg-white/[0.04] text-slate-500 dark:text-neutral-400 border border-slate-200/60 dark:border-white/[0.06]">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-[0.16em] bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-neutral-300 border border-slate-200/60 dark:border-white/[0.06]">
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-[#d4af37]" />
                     {item.status}
                   </span>
@@ -181,39 +176,62 @@ export default function HowToJoin({ onNavigate }) {
                 </h2>
 
                 {/* Step Description / Instructions Box */}
-                <div className="mb-5 p-4 sm:p-5 rounded-xl border border-dashed border-slate-300/80 dark:border-white/10 bg-slate-50/70 dark:bg-white/[0.02]">
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-300 font-light leading-relaxed">
+                <div className="mb-4 sm:mb-5 p-4 sm:p-5 rounded-xl border border-slate-200/80 dark:border-white/[0.06] bg-slate-50/70 dark:bg-white/[0.02]">
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-neutral-300 font-light leading-relaxed">
                     {item.description}
                   </p>
                 </div>
 
                 {/* Step Tip / Note */}
                 {item.note && (
-                  <div className="flex items-start gap-2.5 mb-5 text-[11px] sm:text-xs text-slate-500 dark:text-neutral-400 italic">
+                  <div
+                    className={`flex items-start gap-2.5 p-3.5 sm:p-4 rounded-xl border border-blue-900/10 dark:border-[#d4af37]/15 bg-blue-50/40 dark:bg-[#d4af37]/[0.03] text-xs leading-relaxed text-slate-600 dark:text-neutral-300 ${item.actions && item.actions.length > 0 ? 'mb-5' : 'mb-0'
+                      }`}
+                  >
                     <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-[#d4af37] shrink-0 mt-0.5" />
-                    <span>{item.note}</span>
+                    <div>
+                      <span className="font-mono text-[10.5px] uppercase tracking-wider font-semibold text-blue-900 dark:text-[#f3e5ab] mr-2">
+                        Tip:
+                      </span>
+                      <span className="text-slate-600 dark:text-neutral-300 font-normal">
+                        {item.note}
+                      </span>
+                    </div>
                   </div>
                 )}
 
                 {/* Action Buttons (If Applicable) */}
                 {item.actions && item.actions.length > 0 && (
                   <div className="pt-2 flex flex-wrap gap-3">
-                    {item.actions.map((act) => (
-                      <a
-                        key={act.label}
-                        href={act.href}
-                        target={act.isExternal ? '_blank' : undefined}
-                        rel={act.isExternal ? 'noopener noreferrer' : undefined}
-                        className="group/btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-blue-500/35 dark:border-[#d4af37]/35 bg-white dark:bg-white/[0.03] text-blue-900 dark:text-[#f3e5ab] text-[11px] font-mono uppercase tracking-[0.18em] hover:border-blue-600 dark:hover:border-[#d4af37] hover:bg-blue-50/80 dark:hover:bg-[#d4af37]/15 transition-all duration-300"
-                      >
-                        <span>{act.label}</span>
-                        {act.isExternal ? (
-                          <ArrowUpRight className="w-3.5 h-3.5 text-blue-600 dark:text-[#d4af37] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
-                        ) : (
-                          <ArrowRight className="w-3.5 h-3.5 text-blue-600 dark:text-[#d4af37] group-hover/btn:translate-x-0.5 transition-transform duration-300" />
-                        )}
-                      </a>
-                    ))}
+                    {item.actions.map((act) =>
+                      act.isPrimary ? (
+                        <a
+                          key={act.label}
+                          href={act.href}
+                          target={act.isExternal ? '_blank' : undefined}
+                          rel={act.isExternal ? 'noopener noreferrer' : undefined}
+                          className="group/btn inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 dark:from-[#d4af37] dark:via-[#e2c46c] dark:to-[#c9a02a] text-white dark:text-[#08090d] border border-blue-400/40 dark:border-[#f7e7b4]/60 text-[11px] sm:text-xs font-mono font-semibold uppercase tracking-[0.2em] shadow-[0_4px_25px_rgba(37,99,235,0.32)] hover:shadow-[0_6px_35px_rgba(37,99,235,0.48)] dark:shadow-[0_0_28px_rgba(212,175,55,0.38)] dark:hover:shadow-[0_0_42px_rgba(212,175,55,0.62)] hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.99] hover:brightness-105 transition-all duration-300 ease-out cursor-pointer"
+                        >
+                          <span>{act.label}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-white dark:text-[#08090d] transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300 ease-out" />
+                        </a>
+                      ) : (
+                        <a
+                          key={act.label}
+                          href={act.href}
+                          target={act.isExternal ? '_blank' : undefined}
+                          rel={act.isExternal ? 'noopener noreferrer' : undefined}
+                          className="group/btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-blue-500/35 dark:border-[#d4af37]/35 bg-white dark:bg-white/[0.03] text-blue-900 dark:text-[#f3e5ab] text-[11px] font-mono uppercase tracking-[0.18em] hover:border-blue-600 dark:hover:border-[#d4af37] hover:bg-blue-50/80 dark:hover:bg-[#d4af37]/15 transition-all duration-300"
+                        >
+                          <span>{act.label}</span>
+                          {act.isExternal ? (
+                            <ArrowUpRight className="w-3.5 h-3.5 text-blue-600 dark:text-[#d4af37] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
+                          ) : (
+                            <ArrowRight className="w-3.5 h-3.5 text-blue-600 dark:text-[#d4af37] group-hover/btn:translate-x-0.5 transition-transform duration-300" />
+                          )}
+                        </a>
+                      )
+                    )}
                   </div>
                 )}
               </div>
