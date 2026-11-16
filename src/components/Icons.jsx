@@ -145,3 +145,30 @@ export function ExnessLogo({ className = 'w-7 h-7' }) {
     </svg>
   )
 }
+
+export function ElefinLogo({ className = 'w-7 h-7' }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        width="36"
+        height="36"
+        rx="8"
+        className="fill-[#090d16] stroke-slate-700/60 dark:fill-[#d4af37]/[0.08] dark:stroke-[#d4af37]/25"
+      />
+      {/* Pure White Elefin Logo with Transparent Background */}
+      <image
+        href="/elefin-logo.png"
+        x="5"
+        y="5"
+        width="26"
+        height="26"
+        preserveAspectRatio="xMidYMid meet"
+      />
+    </svg>
+  )
+}

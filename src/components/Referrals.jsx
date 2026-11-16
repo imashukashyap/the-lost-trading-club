@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ArrowUpRight, Copy, Check } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { XMLogo, ExnessLogo } from './Icons'
+import { XMLogo, ExnessLogo, ElefinLogo } from './Icons'
 import { useTheme } from '../context/ThemeContext'
 
 /**
@@ -29,6 +29,16 @@ const REFERRAL_PLATFORMS = [
     buttonText: 'OPEN EXNESS ACCOUNT',
     logo: ExnessLogo,
   },
+  {
+    id: 'elefin',
+    name: 'Elefin Broker',
+    badge: 'Forex & CFD Broker',
+    description: 'Explore the Elefin trading platform.',
+    registrationUrl: 'https://partners.elefin.com/go/TLTCLUB',
+    referralCode: 'TLTCLUB',
+    buttonText: 'OPEN ELEFIN ACCOUNT',
+    logo: ElefinLogo,
+  },
 ]
 
 export default function Referrals() {
@@ -53,7 +63,7 @@ export default function Referrals() {
       id="referrals"
       className="relative py-32 px-6 sm:px-10 border-t border-slate-200/80 dark:border-white/[0.04] transition-colors duration-300"
     >
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-6xl mx-auto text-center">
         {/* Section Label */}
         <motion.div
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
@@ -89,8 +99,8 @@ export default function Referrals() {
           Explore our recommended trading platforms and execution environments.
         </motion.p>
 
-        {/* Two Fully Clickable Referral Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+        {/* Three Fully Clickable Referral Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
           {REFERRAL_PLATFORMS.map((platform, index) => {
             const Logo = platform.logo
             return (
@@ -128,7 +138,7 @@ export default function Referrals() {
                         transition: { duration: 0.35, ease: 'easeOut' },
                       }
                 }
-                className="group relative p-8 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0e14]/60 backdrop-blur-md shadow-sm dark:shadow-none transition-colors duration-300 flex flex-col justify-between cursor-pointer"
+                className="group relative p-7 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0e14]/60 backdrop-blur-md shadow-sm dark:shadow-none transition-colors duration-300 flex flex-col justify-between cursor-pointer"
               >
                 <div>
                   {/* Top Bar: Logo & Badge */}

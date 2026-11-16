@@ -25,7 +25,7 @@ const stepsData = [
     title: 'Account Registration',
     status: 'ACCOUNT SETUP',
     description:
-      'Register with XM or Exness using our official referral links below. Complete the account registration with your correct details.',
+      'Register with XM, Exness, or Elefin using our official referral links below. Complete the account registration with your correct details.',
     note: 'Use our referral links to ensure your registration is properly associated with our community.',
     actions: [
       {
@@ -36,6 +36,11 @@ const stepsData = [
       {
         label: 'Open Exness Account',
         href: 'https://one.exnessonelink.com/a/quwpkgntim',
+        isExternal: true,
+      },
+      {
+        label: 'Open Elefin Account',
+        href: 'https://partners.elefin.com/go/TLTCLUB',
         isExternal: true,
       },
     ],
